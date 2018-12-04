@@ -1,0 +1,80 @@
+{
+  "id" : "home",
+  "presentation" : {
+    "body" : {
+      "type": "section",
+      "id": "body",
+      "children": [
+        {
+          "type": "text",
+          "label": "Warning!",
+          "value": "Please run this task as a related action from a worker.",
+          "render": "${empty queryParams.workerId}"
+        },{
+          "type": "section",
+          "render": "${not empty queryParams.workerId}",
+          "id": "bodySection",
+          "children": [
+            {
+              "type": "section",
+              "id": "orderSection",
+              "title": "Order Business Cards",
+              "children": [
+                {
+                  "type": "richText",
+                  "id": "instructionText",
+                  "value": "Click here to order business cards for the selected worker!  The button below routes to a page that does the following:  <ul><li>A GET API call against the workers resource, passing the id of the worker that the task is being performed on as the path parameter to get contact information (name, address, email, phone number) for the business card order.  This information is used to prepoulate the business card order request form.</li> <li>A GET API call against the country dataset from the <b>Reference Data Service</b> to get a set of drop down values for the country dropdown field.</li><li>A POST API call against the <b>requisitions</b> resource to create a requisition for the business card order.</li></ul>"
+                },
+                {
+                  "type": "button",
+                  "id": "orderButton",
+                  "label": "Order Business Cards for ${queryParams.workerId}",
+                  "_comment": "This isn't a pretty label; it's just to be clear that the ID is coming from the custom task",
+                  "action": "PRIMARY",
+                  "taskReference": {
+                    "taskId": "order",
+                    "parameters": "${json:create(json:attribute('workerId', queryParams.workerId))}"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "section",
+              "id": "orderHistorySection",
+              "title": "Order History",
+              "children": [
+                {
+                  "type": "richText",
+                  "id": "historyInstructionText",
+                  "value": "Retrieve the most recent order history for the worker from Workday!  The button below routes to a page that does the following:  <ul><li>A GET API call against the requisitions resource to get the most recent requisitions for the current user by passing in the id from above as the value for the <b>requester</b> query string parameter.</li></ul><p>The results are presented using a GRID widget.</p>"
+                },
+                {
+                  "type": "button",
+                  "id": "orderHistoryButton",
+                  "label": "Order History for ${queryParams.workerId}",
+                  "action": "PRIMARY",
+                  "taskReference": {
+                    "taskId": "history",
+                    "parameters": "${json:create(json:attribute('workerId', queryParams.workerId))}"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "footer": {
+      "type": "footer",
+      "id": "footer",
+      "children": [
+        {
+          "type": "richText",
+          "id": "footerText",
+          "enabled": "false",
+          "value": "Powered By Workday Cloud Platform"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,116 @@
+{
+  "id" : "cards",
+  "siteId" : "cards",
+  "applicationId" : "cards",
+  "siteAuth": {
+    "authTypes": [
+      {
+        "id" : "sso",
+        "scheme" : "SSO"
+      }
+    ],
+    "defaultId": "sso"
+  },
+  "_comment": "Data providers specify the base URLs for data providers for use in PMDs!",
+  "_comment1": "Note that multiple comments on the same element need a different key.",
+  "dataProviders": [
+    {
+      "key": "workdayReferenceData",
+      "value": "https://api.workday.com/referenceData/"
+    },
+    {
+      "key": "workdayCommon",
+      "value": "https://api.workday.com/common/v1/"
+    },
+    {
+      "key": "workdayProcurement",
+      "value": "https://api.workday.com/procurement/v1/"
+    }
+  ],
+  "titles": [
+    {
+      "value": "Order Business Cards Reference Application",
+      "languageCode": "en_US"
+    }
+  ],
+  "tasks" : [
+    {
+      "routingPattern" : "/",
+      "id" : "home",
+      "page" : {
+        "id" : "home"
+      }
+    },
+    {
+      "routingPattern": "order",
+      "id": "order",
+      "page": {
+        "descriptor": "Order Business Cards",
+        "id": "order"
+      }
+    },
+    {
+      "routingPattern": "submit",
+      "id": "submit",
+      "page": {
+        "descriptor": "Submit the business card order",
+        "id": "submit"
+      }
+    },
+    {
+      "routingPattern": "confirm",
+      "id": "confirm",
+      "page": {
+        "descriptor": "Confirmation page for the order business cards appliation",
+        "id": "confirm"
+      }
+    },
+    {
+      "routingPattern": "history",
+      "id": "history",
+      "page": {
+        "descriptor": "Shows the most recent order history for the logged in user.",
+        "id": "history"
+      }
+    }
+  ],
+  "_comment2": "Flow definitions define how to link up pages to complete a transaction. For this example, we only have one flow for ordering business cards.",
+  "flowDefinitions": [
+    {
+      "id": "flow",
+      "flowSteps": [
+        {
+          "id": "order",
+          "taskId": "order",
+          "startsFlow": true,
+          "transitions": [
+            {
+              "id": "submit",
+              "value": "submit",
+              "order": "a",
+              "condition": "true"
+            }
+          ]
+        },
+        {
+          "descriptor": "Submit business card order",
+          "id": "submit",
+          "taskId": "submit",
+          "transitions": [
+            {
+              "id": "confirm",
+              "value": "confirm",
+              "order": "a",
+              "condition": "true"
+            }
+          ]
+        },
+        {
+          "id": "confirm",
+          "taskId": "confirm",
+          "endsFlow": true
+        }
+      ]
+    }
+  ]
+}

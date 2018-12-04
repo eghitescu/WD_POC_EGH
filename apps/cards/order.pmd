@@ -1,0 +1,158 @@
+{
+  "id": "order",
+  "endPoints": [
+    {
+      "name": "selectedWorker",
+      "baseUrlType": "workdayCommon",
+      "url": "workers/${queryParams.workerId}",
+      "authType" : "sso"
+    },
+    {
+      "name": "countries",
+      "baseUrlType": "workdayReferenceData",
+      "url":"country/vers/latest/items",
+      "authType" : "sso"
+    }
+  ],
+  "outboundData": {
+    "outboundEndPoints": [
+      {
+        "values": [
+          {
+            "outboundPath": "id",
+            "value": "${workerid.value}"
+          },
+          {
+            "outboundPath": "name",
+            "value": "${name.value}"
+          },
+          {
+            "outboundPath": "title",
+            "value": "${title.value}"
+          },
+          {
+            "outboundPath": "address",
+            "value": "${address.value}"
+          },
+          {
+            "outboundPath": "country",
+            "value": "${country.value}"
+          },
+          {
+            "outboundPath": "phone",
+            "value": "${phone.value}"
+          },
+          {
+            "outboundPath": "mobile",
+            "value": "${mobile.value}"
+          },
+          {
+            "outboundPath": "email",
+            "value": "${email.value}"
+          },
+          {
+            "outboundPath": "memo",
+            "value": "${memo.value}"
+          }
+        ],
+        "variableScope": "flow",
+        "type": "outboundVariable",
+        "name": "transitionOutboundVars"
+      }
+    ]
+  },
+  "presentation": {
+    "standardEditButtonsHidden": "${false}",
+    "body": {
+      "type": "section",
+      "id": "body",
+      "children": [
+        {
+          "type": "hidden",
+          "label": "ID",
+          "id": "workerid",
+          "value": "${selectedWorker.id}",
+          "valueOutBinding": "workerid"
+        },
+        {
+          "type": "text",
+          "label": "Name",
+          "id": "name",
+          "required": "true",
+          "value": "${selectedWorker.descriptor}",
+          "valueOutBinding": "name"
+        },
+        {
+          "type": "text",
+          "label": "Title",
+          "id": "title",
+          "required": "true",
+          "value": "${selectedWorker.businessTitle}",
+          "valueOutBinding": "title"
+        },
+        {
+          "type": "textArea",
+          "label": "Address",
+          "id": "address",
+          "required": "true",
+          "value": "${selectedWorker.primaryWorkAddressText}",
+          "valueOutBinding": "address"
+        },
+        {
+          "type": "dropdown",
+          "label": "Country - Reference Data",
+          "values": "${countries.items}",
+          "idKey": "name",
+          "displayKey": "name",
+          "id": "country",
+          "required": "true"
+        },
+        {
+          "type": "text",
+          "label": "Phone",
+          "id": "phone",
+          "required": "true",
+          "value": "${selectedWorker.primaryWorkPhone}",
+          "valueOutBinding": "phone"
+        },
+        {
+          "type": "text",
+          "label": "Mobile",
+          "id": "mobile",
+          "required": "true",
+          "valueOutBinding": "mobile"
+        },
+        {
+          "type": "text",
+          "label": "Email",
+          "id": "email",
+          "required": "true",
+          "value": "${selectedWorker.primaryWorkEmail}",
+          "valueOutBinding": "email"
+        }, {
+          "type": "hidden",
+          "label": "Quantity",
+          "id": "quantity",
+          "value": "1"
+        },
+        {
+          "type": "hidden",
+          "label": "Memo",
+          "id": "memo",
+          "value": "${string:formatListToString('|', list:toList(string:concat('Name:',selectedWorker.descriptor), string:concat('Title:',selectedWorker.businessTitle), string:concat('Address:',selectedWorker.primaryWorkAddressText), 'Country:', string:concat('Phone:',selectedWorker.primaryWorkPhone),'Mobile:',string:concat('Email:',selectedWorker.primaryWorkEmail)))}",
+          "valueOutBinding": "memo"
+        }
+      ]
+    },
+    "footer": {
+      "type": "footer",
+      "id": "footer",
+      "children": [{
+        "type": "richText",
+        "id": "footerText",
+        "enabled": "false",
+          "value": "Powered By Workday Cloud Platform"
+      }]
+    }
+  }
+}
